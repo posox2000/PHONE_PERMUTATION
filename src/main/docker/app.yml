@@ -1,0 +1,14 @@
+version: '2'
+services:
+    phone_permutation-app:
+        image: phone_permutation
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATASOURCE_URL=jdbc:mysql://phone_permutation-mysql:3306/phone_permutation?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+        ports:
+            - 8080:8080
+    phone_permutation-mysql:
+        extends:
+            file: mysql.yml
+            service: phone_permutation-mysql
