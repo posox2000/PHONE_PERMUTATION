@@ -3,39 +3,67 @@
         <span class="hipster img-fluid rounded"></span>
     </div>
     <div class="col-md-9">
-        <h1 class="display-4">Welcome, Java Hipster!</h1>
-        <p class="lead">This is your homepage</p>
-
-        <div [ngSwitch]="isAuthenticated()">
-            <div class="alert alert-success" *ngSwitchCase="true">
-                <span *ngIf="account"
-                   > You are logged in as user "{{account.login}}". </span>
+        <h1 class="display-4">Alpha-numeric phone numbers</h1>
+        <div class="row">
+            <div class="col-md-9  mx-auto">
+            <form [formGroup]="phoneForm" novalidate (ngSubmit)="onGenerate()">
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="phoneNum">Phone Number: </label>
+                    <div class="input-group">
+                        <input type="text" name="phoneNum" 
+                               formControlName="phoneNum" 
+                                pattern="^\d{10}$|^\d{7}$"
+                               class="form-control"
+                               autocomplete="off">
+                        <button type="submit" class="btn btn-primary" >Generate</button>
+                    </div>
+                
+                </div>
+                <div class="col-sm-6">
+                    <label class="md-check">
+                        <input type="radio" value="browser" name="engine" formControlName="engine">
+                        Run in the browser
+                    </label>
+                    <br />
+                    <label class="md-check">
+                        <input type="radio" value="server" name="engine" formControlName="engine">     
+                        Run on the server
+                    </label>
+                </div>
             </div>
-
-            <div class="alert alert-warning" *ngSwitchCase="false">
-                <span>If you want to </span>
-                <a class="alert-link" (click)="login()">sign in</a><span>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
-            </div>
-            <div class="alert alert-warning" *ngSwitchCase="false">
-                <span>You don't have an account yet?</span>
-                <a class="alert-link" routerLink="register">Register a new account</a>
+            </form>
             </div>
         </div>
+        <div>
+            <div *ngIf="phoneNum.errors?.pattern" class="alert alert-warning">
+                <p class="has-error">
+                    Only 7 or 10 digits numbers are allowed.
+                </p>
+            </div>
+        </div>
+        <p>Total variations: <span class="display-5">{{totalCount}}</span></p>
+        <table class="table table-dark table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Phone number variations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let oneNum of generatedNumbers | paginate: { itemsPerPage: 10, currentPage: currentPage, totalItems: totalCount }">
+              <td>{{oneNum}}</td>
+            </tr>
 
-        <p>
-            If you have any question on JHipster:
-        </p>
-
-        <ul>
-            <li><a href="http://www.jhipster.tech/" target="_blank" rel="noopener">JHipster homepage</a></li>
-            <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener">JHipster on Stack Overflow</a></li>
-            <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener">JHipster bug tracker</a></li>
-            <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener">JHipster public chat room</a></li>
-            <li><a href="https://twitter.com/java_hipster" target="_blank" rel="noopener">follow @java_hipster on Twitter</a></li>
-        </ul>
-
-        <p>
-            <span>If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener">GitHub</a>!
-        </p>
+          </tbody>
+        </table>        
+        <div class="row" *ngIf="isGenerated">
+            <div class="col-md-3">Page: {{currentPage}} From: {{totalPages}}</div>
+            <div class="col-md-9">
+              <pagination-controls (pageChange)="currentPage = $event; onNextPage($event);"></pagination-controls>
+            </div>
+        </div>
+        <div class ="row">
+            <p>Provided solution using <strong>JHister(SpringBoot + Angular4)</strong> application as platform, but same result can be acheaved on pure <strong>Java Script and HTML</strong> without any application overhead. Java Script version can be found  on <a href="https://codepen.io/posox2000/full/RMrmPm/">"CODEPEN.IO"</a> </p>
+        </div>
     </div>
 </div>
